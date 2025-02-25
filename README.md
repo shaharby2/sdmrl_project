@@ -43,6 +43,33 @@ Our work consists of three main stages:
 ├── part3_hybrid_learning.py        # Hybrid training approach (Expert + RL)
 
 ```
+## **How to Run the Code**  
+
+### **Train RL Agents (Baseline) - Section 2**  
+To train and evaluate the RL models (**PPO, SAC, TD3, A2C, DDPG**):  
+```bash
+python training.py
+```
+- This will train the agents and save the **baseline models** in `electricity_market_zips/`.  
+
+---
+
+### **Run Hybrid Learning - Section 3**  
+To generate expert data and train **hybrid RL models** (pretrained on expert demonstrations):  
+```bash
+python part3_hybrid_learning.py
+```
+- This will create the **expert dataset** in `IM_expert_files/`.  
+- Fine-tuned **hybrid models** will be saved in `fine_tuned_models/`.  
+
+---
+
+### **Visualize Training Results**  
+To plot training reward curves and compare performance across models:  
+```bash
+python plot_graphs.py
+```
+- Generates **graphs showing RL training progress and hybrid model improvements**.  
 
 ---
 
