@@ -1,4 +1,5 @@
 # **Optimizing Electricity Market Participation Using Hybrid Reinforcement Learning**  
+**Shahar Ben Yehuda, Ori Noriani**
 
 ## **Project Overview**
 This project explores how **Reinforcement Learning (RL) can optimize energy storage and trading decisions** in a dynamic electricity market. We implement a **hybrid learning approach** that combines **expert demonstrations with RL**, allowing agents to learn more efficiently and maximize profits while ensuring household electricity demand is met.
@@ -59,5 +60,4 @@ Our work consists of three main stages:
 
 ---
 
-**Authors**:  
-**Shahar Ben Yehuda, Ori Noriani
+
