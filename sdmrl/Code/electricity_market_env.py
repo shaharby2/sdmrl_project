@@ -4,21 +4,19 @@ import numpy as np
 
 
 class ElectricityMarketEnv(gym.Env):
-    """
-        A reinforcement learning environment simulating an electricity market with a battery storage system.
 
-        The agent can charge or discharge the battery based on electricity prices and household demand.
-        The goal is to optimize energy usage, maximize grid sales at high prices, and minimize demand penalties.
-    """
+    # A reinforcement learning environment simulating an electricity market with a battery storage system.
+    # The agent can charge or discharge the battery based on electricity prices and household demand.
+    # The goal is to optimize energy usage, maximize grid sales at high prices, and minimize demand penalties.
+
     def __init__(self, battery_capacity=100.0, max_demand=150.0, max_price=10.0):
-        """
-                Initializes the electricity market environment.
 
-                Args:
-                    battery_capacity (float): Maximum battery storage capacity.
-                    max_demand (float): Maximum energy demand.
-                    max_price (float): Maximum electricity price.
-        """
+        # Initializes the electricity market environment.
+        # Args:
+        # battery_capacity (float): Maximum battery storage capacity.
+        # max_demand (float): Maximum energy demand.
+        # max_price (float): Maximum electricity price.
+
         super(ElectricityMarketEnv, self).__init__()
 
         # Battery Parameters
@@ -52,17 +50,15 @@ class ElectricityMarketEnv(gym.Env):
         )
 
     def reset(self, seed=None, options=None):
-        """
-                Resets the environment for a new episode.
 
-                Args:
-                    seed (int, optional): Random seed for reproducibility.
-                    options (dict, optional): Additional options.
+        # Resets the environment for a new episode.
+        # Args:
+        # seed (int, optional): Random seed for reproducibility.
+        # options (dict, optional): Additional options.
+        # Returns:
+        # np.array: Initial state [SoC, Demand, Price].
+        # dict: Additional reset info (empty in this case).
 
-                Returns:
-                    np.array: Initial state [SoC, Demand, Price].
-                    dict: Additional reset info (empty in this case).
-        """
         super().reset(seed=seed)
         if seed is not None:
             np.random.seed(seed)
@@ -72,28 +68,25 @@ class ElectricityMarketEnv(gym.Env):
         return self._get_state(), {}
 
     def seed(self, seed=None):
-        """
-                Sets the random seed for reproducibility.
 
-                Args:
-                    seed (int, optional): Seed value.
-        """
+        # Sets the random seed for reproducibility.
+        # Args:
+        # seed (int, optional): Seed value.
+
         np.random.seed(seed)
 
     def step(self, action):
-        """
-                Executes a time step in the environment given an action.
 
-                Args:
-                    action (float or np.ndarray): The amount of energy to charge/discharge.
+        # Executes a time step in the environment given an action.
+        # Args:
+        # action (float or np.ndarray): The amount of energy to charge/discharge.
+        # Returns:
+        # np.array: New state [SoC, Demand, Price].
+        # float: Reward received for the action.
+        # bool: Whether the episode has ended (always False for now).
+        # bool: Whether the episode was truncated (always False for now).
+        # dict: Additional info about the step (e.g., demand fulfillment, price).
 
-                Returns:
-                    np.array: New state [SoC, Demand, Price].
-                    float: Reward received for the action.
-                    bool: Whether the episode has ended (always False for now).
-                    bool: Whether the episode was truncated (always False for now).
-                    dict: Additional info about the step (e.g., demand fulfillment, price).
-        """
         self.time_step += 1
 
         # Ensure action is a scalar
@@ -190,39 +183,34 @@ class ElectricityMarketEnv(gym.Env):
 
 
     def _get_state(self):
-        """
-                Retrieves the current state of the environment.
 
-                Returns:
-                    np.array: State representation [SoC, Demand, Price].
-        """
+        # Retrieves the current state of the environment.
+        # Returns:
+        # np.array: State representation [SoC, Demand, Price].
+
         demand = self._compute_demand(self.time_step)
         price = self._compute_price(self.time_step)
         return np.array([self.soc, demand, price], dtype=np.float32)
 
     def _compute_demand(self, t):
-        """
-                Simulates electricity demand using a periodic function with noise.
 
-                Args:
-                    t (int): Current time step.
+        # Simulates electricity demand using a periodic function with noise.
+        # Args:
+        # t (int): Current time step.
+        # Returns:
+        # float: Simulated electricity demand.
 
-                Returns:
-                    float: Simulated electricity demand.
-         """
         return 100 * np.exp(-((t % 24 - 8) ** 2) / (2 * (2 ** 2))) + \
                120 * np.exp(-((t % 24 - 18) ** 2) / (2 * (3 ** 2))) + np.random.normal(0, 10)
 
     def _compute_price(self, t):
-        """
-                Simulates electricity prices as a stochastic function.
 
-                Args:
-                    t (int): Current time step.
+        # Simulates electricity prices as a stochastic function.
+        # Args:
+        # t (int): Current time step.
+        # Returns:
+        # float: Simulated electricity price.
 
-                Returns:
-                    float: Simulated electricity price.
-        """
         return 5 + 3 * np.sin(2 * np.pi * (t % 24) / 24) + np.random.normal(0, 1)
 
     def render(self):

@@ -12,22 +12,19 @@ from stable_baselines3.sac.policies import MlpPolicy
 from gymnasium.spaces import Box
 
 def generate_expert_data(episodes=200):
-    """
-        Simulates an expert trading strategy in the electricity market and collects training data.
 
-        - Runs the environment for a specified number of episodes.
-        - Uses a rule-based strategy to decide when to buy/sell electricity based on:
-            - Historical price percentiles (low vs. high prices).
-            - Rolling price trend (using linear regression on recent prices).
-            - State of Charge (SoC) and demand constraints.
-        - Saves the expert state-action pairs in `smart_expert_data.csv` for imitation learning.
+    #  Simulates an expert trading strategy in the electricity market and collects training data.
+    #  Runs the environment for a specified number of episodes.
+    #  Uses a rule-based strategy to decide when to buy/sell electricity based on:
+    #  Historical price percentiles (low vs. high prices).
+    #   Rolling price trend (using linear regression on recent prices).
+    #  State of Charge (SoC) and demand constraints.
+    #  Saves the expert state-action pairs in `smart_expert_data.csv` for imitation learning.
+    #  Args:
+    #  episodes (int): Number of episodes to simulate.
+    #  Returns:
+    #  None (saves data to CSV).
 
-        Args:
-            episodes (int): Number of episodes to simulate.
-
-        Returns:
-            None (saves data to CSV).
-    """
     env = ElectricityMarketEnv()
     data = []
 
@@ -91,17 +88,15 @@ if __name__ == "__main__":
 
     # Define a PyTorch Dataset
     class ExpertDataset(Dataset):
-        """
-            Custom dataset for storing expert state-action pairs for imitation learning.
 
-            Args:
-                X (np.array): Array of state features.
-                y (np.array): Array of corresponding actions.
+        #  Custom dataset for storing expert state-action pairs for imitation learning.
+        #  Args:
+        #  X (np.array): Array of state features.
+        #  y (np.array): Array of corresponding actions.
+        #  Methods:
+        #  __len__(): Returns the size of the dataset.
+        #  __getitem__(idx): Returns a single state-action pair at the given index.
 
-            Methods:
-                __len__(): Returns the size of the dataset.
-                __getitem__(idx): Returns a single state-action pair at the given index.
-        """
         def __init__(self, X, y):
             self.X = torch.tensor(X, dtype=torch.float32)
             self.y = torch.tensor(y, dtype=torch.float32).view(-1, 1)
@@ -176,22 +171,19 @@ if __name__ == "__main__":
 
 
     def pretrain_policy(model, dataloader, epochs=20, lr=0.0001):
-        """
-            Pretrains a reinforcement learning policy using Behavior Cloning (BC).
 
-            - Uses supervised learning to train an RL model to imitate expert decisions.
-            - Optimizes the model using the Smooth L1 loss function.
-            - Applies gradient clipping to stabilize training.
+        # Pretrains a reinforcement learning policy using Behavior Cloning (BC).
+        # Uses supervised learning to train an RL model to imitate expert decisions.
+        # Optimizes the model using the Smooth L1 loss function.
+        # Applies gradient clipping to stabilize training.
+        # Args:
+        # model: The RL model to pretrain.
+        # dataloader: The DataLoader providing expert demonstration data.
+        # epochs (int): Number of training epochs.
+        # lr (float): Learning rate for Adam optimizer.
+        # Returns:
+        # None (updates model weights).
 
-            Args:
-                model: The RL model to pretrain.
-                dataloader: The DataLoader providing expert demonstration data.
-                epochs (int): Number of training epochs.
-                lr (float): Learning rate for Adam optimizer.
-
-            Returns:
-                None (updates model weights).
-        """
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         policy_net = model.policy.mlp_extractor.policy_net
         optimizer = torch.optim.Adam(policy_net.parameters(), lr=lr)

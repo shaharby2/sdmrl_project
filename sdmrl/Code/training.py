@@ -13,10 +13,9 @@ from stable_baselines3.common.callbacks import BaseCallback
 
 
 class RewardLoggingCallback(BaseCallback):
-    """
-    Callback for logging rewards and timesteps at regular intervals.
-    This helps track the performance of the agent during training.
-    """
+    #  Callback for logging rewards and timesteps at regular intervals.
+    #  This helps track the performance of the agent during training.
+
 
     def __init__(self, log_interval=100, verbose=1):
         super().__init__(verbose)
@@ -25,9 +24,9 @@ class RewardLoggingCallback(BaseCallback):
         self.total_steps = 0
 
     def _on_step(self) -> bool:
-        """
-        Called at every step during training to log rewards and timesteps.
-        """
+
+        #  Called at every step during training to log rewards and timesteps.
+
         self.total_steps += 1
 
         # Extract reward
@@ -54,10 +53,10 @@ class RewardLoggingCallback(BaseCallback):
 
 
 def evaluate_policy(model, env, episodes=10):
-    """
-    Evaluates the trained model on the given environment for a fixed number of episodes.
-    Returns average profit and demand fulfillment percentage.
-    """
+
+    #  Evaluates the trained model on the given environment for a fixed number of episodes.
+    #  Returns average profit and demand fulfillment percentage.
+
     total_profits = []
     demand_fulfilled = []
 
@@ -99,10 +98,10 @@ def evaluate_policy(model, env, episodes=10):
 
 
 def visualize_policy_behavior(model, env):
-    """
-    Simulates one episode using the trained model and visualizes battery state of charge,
-    energy transactions, and demand fulfillment over time.
-    """
+
+    #  Simulates one episode using the trained model and visualizes battery state of charge,
+    #  energy transactions, and demand fulfillment over time.
+
     reset_result = env.reset()
     obs = reset_result[0] if isinstance(reset_result, tuple) else reset_result
 
@@ -151,11 +150,11 @@ def visualize_policy_behavior(model, env):
 
 
 def plot_training_rewards(log_dirs):
-    """
-    Plots the training rewards for multiple RL algorithms from their respective log directories.
-    Parameters:
-        log_dirs (dict): A dictionary where keys are algorithm names and values are log directory paths.
-    """
+
+    #  Plots the training rewards for multiple RL algorithms from their respective log directories.
+    #  Parameters:
+    #  log_dirs (dict): A dictionary where keys are algorithm names and values are log directory paths.
+
     plt.figure(figsize=(10, 5))
 
     for algo_name, log_dir in log_dirs.items():
